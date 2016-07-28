@@ -1,0 +1,10 @@
+---
+zsh_user: "{{ ansible_user_id }}"
+zsh_default_shell: yes
+zsh_default_shell_for_new_user: yes
+# zshrc file path to copy
+# zsh_rc_file_source_path:
+zsh_rc_file_path: "/home/{{ zsh_user }}/.zshrc"
+# global zshrc file path to copy
+# zsh_global_rc_file_source_path:
+zsh_global_rc_file_path: /etc/zsh/zshrc

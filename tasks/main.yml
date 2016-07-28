@@ -1,0 +1,24 @@
+---
+- name: "Install zsh"
+  apt: name="zsh" update_cache=yes cache_valid_time=3600 state=latest
+  become: yes
+
+- name: Use zsh as default shell
+  user: name={{ zsh_user }} shell=/bin/zsh
+  become: yes
+  when: zsh_default_shell
+
+- name: Use zsh as default shell for new user
+  lineinfile: dest=/etc/adduser.conf regexp="^DSHELL=" line="DSHELL=/bin/zsh"
+  become: yes
+  when: zsh_default_shell_for_new_user
+
+- name: copy user zshrc
+  copy: src={{ zsh_rc_file_source_path }} dest={{ zsh_rc_file_path }} owner={{ zsh_user }} group={{ zsh_user }} mode=0644
+  become: yes
+  when: zsh_rc_file_source_path is defined
+
+- name: copy global zshrc
+  copy: src={{ zsh_global_rc_file_source_path }} dest={{ zsh_global_rc_file_path }} owner=root group=root mode=0644
+  become: yes
+  when: zsh_global_rc_file_source_path is defined
