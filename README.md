@@ -11,13 +11,11 @@ None
 Role Variables
 --------------
 
-````yaml
-zsh_user: {{ ansible_user_id }}
-zsh_default_shell: yes
+````ansible
+zsh_users:
+  - "{{ ansible_user_id }}"
+# -  { user: username, zsh_rc_file_path: zsh_rc_file_path, default_shell: yes }
 zsh_default_shell_for_new_user: yes
-# zshrc file path to copy
-# zsh_rc_file_source_path:
-zsh_rc_file_path: "/home/{{ zsh_user }}/.zshrc"
 # global zshrc file path to copy
 # zsh_global_rc_file_source_path:
 zsh_global_rc_file_path: /etc/zsh/zshrc
@@ -30,25 +28,27 @@ None
 
 Example Playbook
 ----------------
+By default zsh is configured for connected user.
 
-````yaml
+````ansible
 - hosts: servers
   roles:
      - { role: mlangry.zsh }
 ````
 If you want to configure zsh for multiple users:
 
-````yaml
+````ansible
 - hosts: servers
   roles:
     - role: ansible-role-zsh
-      zsh_user: user1
-      zsh_rc_file_source_path: zshrc1
-
-    - role: ansible-role-zsh
-      zsh_user: user2
-      zsh_rc_file_source_path: zshrc2
+      zsh_users:
+        - { user: user1, zsh_rc_file_path: zshrc1, default_shell: yes }
+        - { user: user2 }
+        - { user: user3, default_shell: no }
+        - user4
 ````
+
+By default zsh is set as the default shell for user.
 
 License
 -------

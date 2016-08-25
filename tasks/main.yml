@@ -4,9 +4,10 @@
   become: yes
 
 - name: Use zsh as default shell
-  user: name={{ zsh_user }} shell=/bin/zsh
+  user: name={{ item.user | default(item) }} shell=/bin/zsh
   become: yes
-  when: zsh_default_shell
+  when: item.default_shell | default(True)
+  with_items: "{{ zsh_users }}"
 
 - name: Use zsh as default shell for new user
   lineinfile: dest=/etc/adduser.conf regexp="^DSHELL=" line="DSHELL=/bin/zsh"
@@ -14,11 +15,13 @@
   when: zsh_default_shell_for_new_user
 
 - name: copy user zshrc
-  copy: src={{ zsh_rc_file_source_path }} dest={{ zsh_rc_file_path }} owner={{ zsh_user }} group={{ zsh_user }} mode=0644
+  copy: src={{ item.zsh_rc_file_source_path }} dest="~/.zshrc"
   become: yes
-  when: zsh_rc_file_source_path is defined
+  become_user: "{{ item.user }}"
+  when: item.zsh_rc_file_source_path is defined
+  with_items: "{{ zsh_users }}"
 
 - name: copy global zshrc
-  copy: src={{ zsh_global_rc_file_source_path }} dest={{ zsh_global_rc_file_path }} owner=root group=root mode=0644
   become: yes
+  copy: src={{ zsh_global_rc_file_source_path }} dest={{ zsh_global_rc_file_path }} owner=root group=root mode=0644
   when: zsh_global_rc_file_source_path is defined
