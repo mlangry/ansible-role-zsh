@@ -18,7 +18,7 @@ install:
   - ansible --version
 
   # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+  - printf '[defaults]\nroles_path=../\nallow_world_readable_tmpfiles=yes' >ansible.cfg
 
   # Create files directory
   - mkdir files
