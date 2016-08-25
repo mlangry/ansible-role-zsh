@@ -11,7 +11,7 @@ None
 Role Variables
 --------------
 
-````ansible
+````yaml
 zsh_users:
   - "{{ ansible_user_id }}"
 # -  { user: username, zsh_rc_file_path: zsh_rc_file_path, default_shell: yes }
@@ -30,14 +30,14 @@ Example Playbook
 ----------------
 By default zsh is configured for connected user.
 
-````ansible
+````yaml
 - hosts: servers
   roles:
      - { role: mlangry.zsh }
 ````
 If you want to configure zsh for multiple users:
 
-````ansible
+````yaml
 - hosts: servers
   roles:
     - role: ansible-role-zsh
